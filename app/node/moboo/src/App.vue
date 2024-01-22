@@ -9,6 +9,7 @@ import imgSit from './assets/sitdown.png'
 type TypePredResult = {
   id: number,
   pred_result: string,
+  pred_result_simp: string,
   message: string,
   img: string
 }
@@ -23,12 +24,15 @@ type TypeResultAll = {
   file_name: string,
   pred_result: string,
   prob_result?: TypeProbResult,
+  pred_result_simp: string,
+  prob_result_simp?: TypeProbResult,
   created_at: string
 }
 
 const pred_result = reactive<TypePredResult>({
   id: 0,
   pred_result: "",
+  pred_result_simp: "",
   message: "",
   img: ""
 })
@@ -64,6 +68,16 @@ axios.get(
         img?.setAttribute('src', imgSit)
         break
     }
+
+    switch(response.data.pred_result_simp) {
+      case "move":
+        pred_result.pred_result_simp = "動く"
+        break
+      case "static":
+        pred_result.pred_result_simp = "静止"
+        break
+    }
+    console.log(pred_result)
   }
 ).catch(
   () => {
@@ -145,6 +159,14 @@ const covert_action_name = (old_data: TypeResultAll[])  => {
         old_data[i].pred_result = "座る"
         break
     }
+    switch(old_data[i].pred_result_simp) {
+      case 'move':
+        old_data[i].pred_result_simp = "動く"
+        break
+      case "static":
+        old_data[i].pred_result_simp = "静止"
+        break
+    }
   }
 }
 
@@ -186,7 +208,12 @@ const covert_action_name = (old_data: TypeResultAll[])  => {
         <img src="" alt="推定行動の画像" max-h-64 class="rounded-xl" id="pred-img"/>
       </figure>
       <div class="card-body items-center text-center">
-        <h2 class="card-title">{{ pred_result.pred_result }}</h2>
+        <h2 class="card-title">
+          {{ pred_result.pred_result }}
+          <span class="badge badge-primary badge-outline">
+            {{ pred_result.pred_result_simp }}
+          </span>
+        </h2>
         <p>{{ pred_result.message }}</p>
         <div class="card-actions">
           <button class="btn btn-primary" onclick="my_modal_2.showModal()" v-on:click="get_prob_result(pred_result.id)">予測結果の表示</button>
@@ -225,7 +252,12 @@ const covert_action_name = (old_data: TypeResultAll[])  => {
               <tr v-for="result in result_all" :class="{'bg-red-100':  result.pred_result == '転倒' }">
                 <th >{{ result.id }}</th>
                 <td>{{ result.created_at }}</td>
-                <td>{{ result.pred_result }}</td>
+                <td>
+                  {{ result.pred_result }}
+                  <span class="badge badge-primary badge-outline">
+                    {{ result.pred_result_simp }}
+                  </span>
+                </td>
                 <td>
                   <div class="card-actions">
                     <button class="btn btn-primary btn-sm" onclick="my_modal_2.showModal()" v-on:click="get_prob_result(result.id)">予測結果の表示</button>
