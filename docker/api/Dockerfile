@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && pip install -r requirements.txt --no-cache-dir \
   && apt-get purge -y --auto-remove build-essential gcc musl-dev
 
-COPY ../app/api .
+COPY ./app/api .
 
 EXPOSE 8000
 
