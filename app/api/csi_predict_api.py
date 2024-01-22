@@ -7,6 +7,7 @@ import shutil
 import tempfile
 
 from predict.predict_comp import predict
+from predict.predict_simp import predict_simp
 import crud, models, schemas
 from database import SessionLocal, engine
 
@@ -45,8 +46,9 @@ def save_predict(db: Session = Depends(get_db), file: UploadFile = File(...)):
     with tempfile.NamedTemporaryFile(delete=True, dir=".", suffix=".csv") as temp_file:
         shutil.copyfileobj(file.file, temp_file)
         pred_result, prob_result = predict(temp_file.name, file.filename)
+        pred_result_simp, prob_result_simp = predict_simp(temp_file.name, file.filename)
 
-        result = schemas.PredictResultCreate(file_name=file.filename, pred_result=pred_result, prob_result=prob_result)
+        result = schemas.PredictResultCreate(file_name=file.filename, pred_result=pred_result, prob_result=prob_result, pred_result_simp=pred_result_simp, prob_result_simp=prob_result_simp)
         crud.save_predict_result(db=db,result=result)
 
     return JSONResponse(content={"res": "ok", "filename": file.filename})

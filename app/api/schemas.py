@@ -5,6 +5,8 @@ class PredictResultBase(BaseModel):
   file_name: str
   pred_result: str
   prob_result: str
+  pred_result_simp: str
+  prob_result_simp: str
 
 
 class PredictResultCreate(PredictResultBase):

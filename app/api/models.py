@@ -13,4 +13,6 @@ class PredictResult(Base):
   file_name = Column(String, nullable=False)
   pred_result = Column(String, nullable=True)
   prob_result = Column(JSONB, nullable=True)
+  pred_result_simp = Column(String, nullable=True)
+  prob_result_simp = Column(JSONB, nullable=True)
   created_at = Column(DateTime, default=datetime.now(), nullable=False)

@@ -8,6 +8,8 @@ CREATE TABLE predict_result (
   file_name varchar NOT NULL,
   pred_result varchar NOT NULL,
   prob_result jsonb NOT NULL,
+  pred_result_simp varchar NOT NULL,
+  prob_result_simp varchar NOT NULL,
   created_at timestamp without time zone NOT NULL
 );
 
